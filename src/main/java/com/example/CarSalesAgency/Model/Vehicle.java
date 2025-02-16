@@ -1,50 +1,43 @@
 package com.example.CarSalesAgency.Model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-
+@Entity
+@Table(name = "vehicules") // Ensure this matches the actual table name in the database
+@Getter
+@Setter // Using @Getter and @Setter instead of @Data to avoid potential pitfalls with @Entity
 public class Vehicle {
 
-    @Entity
-    @Table(name = "vehicules")
-    @Data
-    public class Vehicule {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
+    private Long id;
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "id", updatable = false, nullable = false)
-        private Long id;
+    @Column(nullable = false) // Ensure this cannot be null
+    private String marque;
 
-        @Column(name = "marque", nullable = false)
-        private String marque;
+    @Column(nullable = false) // Ensure this cannot be null
+    private String modele;
 
-        @Column(name = "modele", nullable = false)
-        private String modele;
+    private Integer anneeFabrication;
 
-        @Column(name = "annee_fabrication")
-        private Integer anneeFabrication;
+    private Double prix;
 
-        @Column(name = "prix")
-        private Double prix;
+    private Integer kilometrage;
 
-        @Column(name = "kilometrage")
-        private Integer kilometrage;
+    private Integer miseEnCirculation;
 
-        @Column(name = "mise_en_circulation")
-        private Integer miseEnCirculation;
+    private String energie;
 
-        @Column(name = "energie")
-        private String energie;
+    private String boiteVitesse;
 
-        @Column(name = "boite_vitesse")
-        private String boiteVitesse;
+    private Integer puissanceFiscale;
 
-        @Column(name = "puissance_fiscale")
-        private Integer puissanceFiscale;
+    private String carrosserie;
 
-        @Column(name = "carrosserie")
-        private String carrosserie;
-    }
-
+    // Constructors, if needed, can be generated manually or using Lombok (@NoArgsConstructor, @AllArgsConstructor)
 }
+
+
