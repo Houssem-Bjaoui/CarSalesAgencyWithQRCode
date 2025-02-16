@@ -1,43 +1,48 @@
 package com.example.CarSalesAgency.Model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
+import lombok.Data;
 
 @Entity
-@Table(name = "vehicules") // Ensure this matches the actual table name in the database
-@Getter
-@Setter // Using @Getter and @Setter instead of @Data to avoid potential pitfalls with @Entity
+@Table(name = "vehicules")
+@Data
 public class Vehicle {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
     private Long id;
 
-    @Column(nullable = false) // Ensure this cannot be null
+    @NotNull(message = "La marque est obligatoire")
+    @Column(nullable = false)
     private String marque;
 
-    @Column(nullable = false) // Ensure this cannot be null
+    @NotNull(message = "Le modèle est obligatoire")
+    @Column(nullable = false)
     private String modele;
 
+    @Column(name = "annee_fabrication")
+    @PositiveOrZero(message = "L'année doit être positive")
     private Integer anneeFabrication;
 
+    @PositiveOrZero(message = "Le prix doit être positif")
     private Double prix;
 
+    @PositiveOrZero(message = "Le kilométrage doit être positif")
     private Integer kilometrage;
 
+    @Column(name = "mise_en_circulation")
     private Integer miseEnCirculation;
 
     private String energie;
 
+    @Column(name = "boite_vitesse")
     private String boiteVitesse;
 
+    @Column(name = "puissance_fiscale")
+    @PositiveOrZero(message = "La puissance doit être positive")
     private Integer puissanceFiscale;
 
     private String carrosserie;
-
-    // Constructors, if needed, can be generated manually or using Lombok (@NoArgsConstructor, @AllArgsConstructor)
 }
-
-

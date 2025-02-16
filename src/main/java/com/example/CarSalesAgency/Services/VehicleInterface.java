@@ -4,6 +4,6 @@ import com.example.CarSalesAgency.Model.Vehicle;
 
 public interface VehicleInterface {
 
-    public Vehicle addVehicle(Vehicle vehicle);
+    Vehicle addVehicle(Vehicle vehicle);
 
 }

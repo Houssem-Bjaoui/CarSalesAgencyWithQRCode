@@ -9,10 +9,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class VehicleService implements VehicleInterface {
     @Autowired
-    VehicleRepository vehicleRepository;
+    private VehicleRepository vehicleRepository;
+
     @Override
     public Vehicle addVehicle(Vehicle vehicle) {
-        return vehicleRepository.save(vehicle);
 
+        return vehicleRepository.save(vehicle);
     }
 }
