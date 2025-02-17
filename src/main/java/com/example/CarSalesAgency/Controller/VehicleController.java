@@ -6,6 +6,8 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/vehicles")
 public class VehicleController {
@@ -13,7 +15,19 @@ public class VehicleController {
     private VehicleInterface vehicleinterface;
 
     @PostMapping("/add")
-    public Vehicle addVehicle(@Valid @RequestBody Vehicle vehicle) {
+    public Vehicle addVehicle(@RequestBody Vehicle vehicle) {
         return vehicleinterface.addVehicle(vehicle);
     }
+
+    @DeleteMapping("/delete/{id}")
+    public void deleteVehicle(@PathVariable Long id) {
+        vehicleinterface.deleteVehicle(id);
+    }
+
+    @PostMapping("addList")
+    public List<Vehicle> addListVehicle(@RequestBody List<Vehicle> listvehicle) {
+        return vehicleinterface.addListVehicle(listvehicle);
+    }
+
+
 }
