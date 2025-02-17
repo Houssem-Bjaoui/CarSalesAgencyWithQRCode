@@ -22,27 +22,35 @@ public class Vehicle {
     @Column(nullable = false)
     private String modele;
 
+    @NotNull
     @Column(name = "annee_fabrication")
     @PositiveOrZero(message = "L'année doit être positive")
     private Integer anneeFabrication;
 
+    @NotNull
     @PositiveOrZero(message = "Le prix doit être positif")
     private Double prix;
 
+    @NotNull
     @PositiveOrZero(message = "Le kilométrage doit être positif")
     private Integer kilometrage;
 
+    @NotNull
     @Column(name = "mise_en_circulation")
     private Integer miseEnCirculation;
 
+    @NotNull
     private String energie;
 
+    @NotNull
     @Column(name = "boite_vitesse")
     private String boiteVitesse;
 
+    @NotNull
     @Column(name = "puissance_fiscale")
     @PositiveOrZero(message = "La puissance doit être positive")
     private Integer puissanceFiscale;
 
+    @NotNull
     private String carrosserie;
 }
