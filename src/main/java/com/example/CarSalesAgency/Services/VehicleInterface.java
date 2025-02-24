@@ -11,6 +11,8 @@ public interface VehicleInterface {
         Vehicle updateVehicle(Long id, Vehicle vehicle);
         List<Vehicle> getAllVehicle();
         Vehicle getVehicleById(Long id);
+    void deleteVehicle(Long id);
+    List<Vehicle> addListUsers(List<Vehicle> listusers);
     }
 
 

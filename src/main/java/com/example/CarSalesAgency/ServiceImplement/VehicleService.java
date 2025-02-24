@@ -43,8 +43,14 @@ public class VehicleService implements VehicleInterface {
         return vehicleRepository.findById(id).orElse(null);
     }
 
+    @Override
+    public void deleteVehicle(Long id) {
+        vehicleRepository.deleteById(id);
+    }
 
-
-
+    @Override
+    public List<Vehicle> addListUsers(List<Vehicle> listusers) {
+        return vehicleRepository.saveAll(listusers);
+    }
 
 }

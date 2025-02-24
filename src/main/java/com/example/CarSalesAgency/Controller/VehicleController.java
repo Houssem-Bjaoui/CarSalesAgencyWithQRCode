@@ -33,4 +33,14 @@ public class VehicleController {
         return vehicleinterface.getVehicleById(id);
     }
 
+    @DeleteMapping("/deleteVehicle/{idv}")
+    public void deleteVehicle(@PathVariable("idv") Long id) {
+         vehicleinterface.deleteVehicle(id);
+    }
+    @PostMapping("addlistVehicle")
+    public List<Vehicle> addlistvehicles(@RequestBody List<Vehicle> vehicles)
+    {
+        return vehicleinterface.addListUsers(vehicles);
+    }
+
 }
