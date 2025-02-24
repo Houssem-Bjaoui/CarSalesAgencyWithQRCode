@@ -6,6 +6,8 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/vehicles")
 public class VehicleController {
@@ -16,4 +18,19 @@ public class VehicleController {
     public Vehicle addVehicle(@Valid @RequestBody Vehicle vehicle) {
         return vehicleinterface.addVehicle(vehicle);
     }
+    @PatchMapping("/updateVehicle/{idv}")
+    public Vehicle updateVehicle(@PathVariable ("idv")Long id, @RequestBody Vehicle vehicle) {
+        return vehicleinterface.updateVehicle(id, vehicle);
+    }
+
+    @GetMapping("/getAllVehicule")
+    public List<Vehicle> getAllVehicle() {
+        return vehicleinterface.getAllVehicle();
+    }
+
+    @GetMapping("getVehicleById/{id}")
+    public Vehicle getVehicleById(@PathVariable Long id) {
+        return vehicleinterface.getVehicleById(id);
+    }
+
 }

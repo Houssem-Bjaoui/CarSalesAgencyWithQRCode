@@ -1,0 +1,13 @@
+[33m068ec24[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m)[m HEAD@{0}: commit (merge): Merge remote-tracking branch 'origin/master'
+[33me58fc8f[m HEAD@{1}: commit (amend): Fusion des historiques
+[33mb5b8cd5[m[33m ([m[1;31morigin/master[m[33m)[m HEAD@{2}: commit: Fusion des historiques
+[33m41b5f34[m HEAD@{3}: commit (amend): Fusion des historiques
+[33m2bbba6b[m HEAD@{4}: commit: Fusion des historiques
+[33m8042f64[m HEAD@{5}: commit: Fusion des historiques
+[33m1f9401d[m HEAD@{6}: commit (amend): Fusion des historiques
+[33mf134625[m HEAD@{7}: commit: Fusion des historiques
+[33m0b18763[m HEAD@{8}: pull --rebase origin master (finish): returning to refs/heads/master
+[33m0b18763[m HEAD@{9}: pull --rebase origin master (start): checkout 0b1876330e5180567f1dd797de69b84990f1a486
+[33md8a6b1d[m HEAD@{10}: commit (amend): Initialisation du projet Spring Boot
+[33m4b434f0[m HEAD@{11}: commit (amend): Initialisation du projet Spring Boot
+[33m0b18763[m HEAD@{12}: commit (initial): Initialisation du projet Spring Boot
