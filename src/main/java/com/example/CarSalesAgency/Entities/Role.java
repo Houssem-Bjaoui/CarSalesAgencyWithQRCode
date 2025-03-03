@@ -1,7 +1,7 @@
-package com.example.CarSalesAgency.Model;
+package com.example.CarSalesAgency.Entities;
 
 
-import com.example.CarSalesAgency.enums.RoleName;
+import com.example.CarSalesAgency.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,8 +12,8 @@ import lombok.Setter;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idrole;
     @Enumerated(EnumType.STRING)
-    private RoleName rolename;
+    private UserRole rolename;
 
 }

@@ -1,6 +1,6 @@
 package com.example.CarSalesAgency.enums;
 
-public enum RoleName {
+public enum UserRole {
 
     Client,
     ADMIN

@@ -1,15 +1,20 @@
 package com.example.CarSalesAgency.Entities;
 
+import com.example.CarSalesAgency.enums.StatutVehicule;
 import com.example.CarSalesAgency.enums.TypeVehicule;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 @Entity
 @Table(name = "vehicules")
 @Data
-public class Vehicle {
+public class Vehicule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,4 +62,16 @@ public class Vehicle {
 
     @Enumerated(EnumType.STRING)
     private TypeVehicule typeVehicule; // NEUF ou OCCASION
+
+    @Enumerated(EnumType.STRING)
+    private StatutVehicule statutVehicule;// DISPONIBLE ou VENDU
+
+    @Temporal(TemporalType.DATE)
+    private Date CretaedAt;
+
+    @ManyToOne
+    private User user;
+
+    @OneToMany(mappedBy = "vehicule", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private List<Comment> comments;
 }
