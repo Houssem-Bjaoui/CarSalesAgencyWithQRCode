@@ -1,6 +1,7 @@
 package com.example.CarSalesAgency.Model;
 
 
+import com.example.CarSalesAgency.enums.RoleName;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

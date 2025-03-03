@@ -1,5 +1,6 @@
-package com.example.CarSalesAgency.Model;
+package com.example.CarSalesAgency.Entities;
 
+import com.example.CarSalesAgency.enums.TypeVehicule;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -53,4 +54,7 @@ public class Vehicle {
 
     @NotNull
     private String carrosserie;
+
+    @Enumerated(EnumType.STRING)
+    private TypeVehicule typeVehicule; // NEUF ou OCCASION
 }
