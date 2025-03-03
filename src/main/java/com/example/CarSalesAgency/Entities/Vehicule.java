@@ -2,12 +2,13 @@ package com.example.CarSalesAgency.Entities;
 
 import com.example.CarSalesAgency.enums.StatutVehicule;
 import com.example.CarSalesAgency.enums.TypeVehicule;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -61,17 +62,23 @@ public class Vehicule {
     private String carrosserie;
 
     @Enumerated(EnumType.STRING)
-    private TypeVehicule typeVehicule; // NEUF ou OCCASION
+    private TypeVehicule typeVehicule;
 
     @Enumerated(EnumType.STRING)
-    private StatutVehicule statutVehicule;// DISPONIBLE ou VENDU
+    private StatutVehicule statutVehicule;
 
-    @Temporal(TemporalType.DATE)
-    private Date CretaedAt;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = new Date();
+    }
 
     @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @OneToMany(mappedBy = "vehicule", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "vehicule", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Comment> comments;
 }

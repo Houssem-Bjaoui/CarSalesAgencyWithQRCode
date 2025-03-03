@@ -1,5 +1,6 @@
 package com.example.CarSalesAgency.Entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name="users")
+@Table(name = "users")
 @Data
 public class User {
 
@@ -18,29 +19,30 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private String username;
 
-    @Column(unique=true)
-    @NotNull
+    @Column(unique = true, nullable = false)
     private String email;
+
     @NotNull
     private String password;
 
     @ManyToMany
-    @JoinTable(name = "userRole" , joinColumns = @JoinColumn(name = "id"),
-    inverseJoinColumns = @JoinColumn(name = "idrole"))
-    private Set<Role> roles=new HashSet<>();
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "id"),
+            inverseJoinColumns = @JoinColumn(name = "idrole")
+    )
+    private Set<Role> roles = new HashSet<>();
 
-    @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Vehicule> vehicules;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Comment> comments;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "LikeId",referencedColumnName = "id")
-    private Like like;
-
-
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Like> likes;
 }
+
