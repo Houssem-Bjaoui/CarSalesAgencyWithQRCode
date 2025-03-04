@@ -14,70 +14,58 @@ import java.util.List;
 @RestController
 @RequestMapping("/vehicles")
 public class VehiculeController {
+
     @Autowired
-    private VehicleInterface vehicleinterface;
+    private VehicleInterface vehicleInterface;
 
     @Autowired
     private VehicleRepository vehicleRepository;
 
     @PostMapping("/add")
     public Vehicule addVehicle(@RequestBody Vehicule vehicle) {
-        return vehicleinterface.addVehicle(vehicle);
+        return vehicleInterface.addVehicle(vehicle);
     }
 
     @PatchMapping("/updateVehicle/{idv}")
     public Vehicule updateVehicle(@PathVariable("idv") Long id, @RequestBody Vehicule vehicle) {
-        return vehicleinterface.updateVehicle(id, vehicle);
+        return vehicleInterface.updateVehicle(id, vehicle);
     }
 
     @GetMapping("/getAllVehicule")
-    public List<Vehicule> getAllVehicle() {
-        return vehicleinterface.getAllVehicle();
+    public List<Vehicule> getAllVehicles() {
+        return vehicleInterface.getAllVehicle();
     }
 
-    @GetMapping("getVehicleById/{id}")
+    @GetMapping("/getVehicleById/{id}")
     public Vehicule getVehicleById(@PathVariable Long id) {
-        return vehicleinterface.getVehicleById(id);
+        return vehicleInterface.getVehicleById(id);
     }
 
     @DeleteMapping("/deleteVehicle/{idv}")
     public void deleteVehicle(@PathVariable("idv") Long id) {
-        vehicleinterface.deleteVehicle(id);
+        vehicleInterface.deleteVehicle(id);
     }
 
-    @PostMapping("addlistVehicle")
-    public List<Vehicule> addlistvehicles(@RequestBody List<Vehicule> vehicles) {
-        return vehicleinterface.addListVehicles(vehicles);
+    @PostMapping("/addListVehicle")
+    public List<Vehicule> addListVehicles(@RequestBody List<Vehicule> vehicles) {
+        return vehicleInterface.addListVehicles(vehicles);
     }
 
-    // Mettre à jour le type via paramètre de requête
     @PutMapping("/{id}/type")
-    public ResponseEntity<Vehicule> updateType(
-            @PathVariable Long id,
-            @RequestParam TypeVehicule type
-    ) {
-        return ResponseEntity.ok(
-                vehicleinterface.updateTypeVehicule(id, type)
-        );
+    public ResponseEntity<Vehicule> updateType(@PathVariable Long id, @RequestParam TypeVehicule type) {
+        return ResponseEntity.ok(vehicleInterface.updateTypeVehicule(id, type));
     }
 
-    // Mettre à jour le statut via paramètre de requête
     @PutMapping("/{id}/statut")
-    public ResponseEntity<Vehicule> updateStatut(
-            @PathVariable Long id,
-            @RequestParam StatutVehicule statut
-    ) {
-        return ResponseEntity.ok(
-                vehicleinterface.updateStatutVehicule(id, statut)
-        );
+    public ResponseEntity<Vehicule> updateStatut(@PathVariable Long id, @RequestParam StatutVehicule statut) {
+        return ResponseEntity.ok(vehicleInterface.updateStatutVehicule(id, statut));
     }
 
-    // Lister tous les véhicules OU filtrer par type et statut
     @GetMapping
     public ResponseEntity<List<Vehicule>> getVehicules(
             @RequestParam(required = false) TypeVehicule type,
-            @RequestParam(required = false) StatutVehicule statut
-    ) {
+            @RequestParam(required = false) StatutVehicule statut) {
+
         if (type != null && statut != null) {
             return ResponseEntity.ok(vehicleRepository.findByTypeVehiculeAndStatutVehicule(type, statut));
         } else if (type != null) {

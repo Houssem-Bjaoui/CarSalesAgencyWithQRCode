@@ -15,17 +15,27 @@ public class CommentService implements CommentInterface {
     @Autowired
     private CommentRepository commentRepository;
 
-
     @Override
     public Comment addComment(Comment comment) {
         return commentRepository.save(comment);
     }
 
-
-
     @Override
     public void deleteComment(Long id) {
-        commentRepository.deleteById(id);
+        if (commentRepository.existsById(id)) {
+            commentRepository.deleteById(id);
+        } else {
+            throw new RuntimeException("Commentaire non trouvé !");
+        }
+    }
 
+    @Override
+    public List<Comment> getCommentsByVehicule(Long vehiculeId) {
+        return commentRepository.findByVehiculeId(vehiculeId);
+    }
+
+    @Override
+    public List<Comment> getCommentsByUser(Long userId) {
+        return commentRepository.findByUserId(userId);
     }
 }

@@ -22,6 +22,7 @@ public class Comment {
 
     @NotNull(message = "Le contenu est obligatoire")
     @Size(max = 500, message = "Le commentaire ne doit pas dépasser 500 caractères")
+    @Column(nullable = false)
     private String comment;
 
     private LocalDateTime createdAt;
@@ -32,16 +33,15 @@ public class Comment {
     }
 
     @ManyToOne
-    @JoinColumn(name = "vehicule_id", referencedColumnName = "id")
-
+    @JoinColumn(name = "vehicule_id", referencedColumnName = "id", nullable = false)
     private Vehicule vehicule;
 
-  @OneToMany(mappedBy = "comment" , cascade = CascadeType.ALL ,orphanRemoval = true )
-  private List<Like> likes;
-
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Like> likes;
 }
+
 

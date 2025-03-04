@@ -8,7 +8,6 @@ import java.util.List;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-
-   // List<Comment> findByVehiculeId(Long vehiculeId); // Trouver les commentaires d'un véhicule
-    //List<Comment> findByUserId(Long userId); // Trouver les commentaires d'un utilisateur
+    List<Comment> findByVehiculeId(Long vehiculeId);
+    List<Comment> findByUserId(Long userId);
 }
