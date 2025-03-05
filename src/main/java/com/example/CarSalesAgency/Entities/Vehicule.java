@@ -79,4 +79,7 @@ public class Vehicule {
 
     @OneToMany(mappedBy = "vehicule", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Comment> comments;
+
+    @OneToMany(mappedBy = "vehicule" , cascade = CascadeType.ALL , fetch =  FetchType.LAZY)
+    private List<TestDrive> testDrives;
 }

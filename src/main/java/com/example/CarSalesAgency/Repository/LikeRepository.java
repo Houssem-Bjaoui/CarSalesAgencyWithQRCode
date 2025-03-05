@@ -10,9 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface LikeRepository extends JpaRepository<Like, Long> {
-    // Trouver un like par utilisateur et commentaire
-    Optional<Like> findByUserAndComment(User user, Comment comment);
-
-    // Compter les likes d'un commentaire
-    int countByComment(Comment comment);
+    boolean existsByUser_IdAndComment_Id(Long userId, Long commentId);
+    void deleteByUser_IdAndComment_Id(Long userId, Long commentId);
+    long countByComment_Id(Long commentId);
 }
