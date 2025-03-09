@@ -2,13 +2,17 @@ package com.example.CarSalesAgency.Controller;
 
 import com.example.CarSalesAgency.Entities.Vehicule;
 import com.example.CarSalesAgency.Repository.VehicleRepository;
+import com.example.CarSalesAgency.ServiceImplement.QRCodeService;
 import com.example.CarSalesAgency.Services.VehicleInterface;
 import com.example.CarSalesAgency.enums.StatutVehicule;
 import com.example.CarSalesAgency.enums.TypeVehicule;
+import com.google.zxing.WriterException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -18,8 +22,10 @@ public class VehiculeController {
     @Autowired
     private VehicleInterface vehicleInterface;
 
+
+
     @Autowired
-    private VehicleRepository vehicleRepository;
+    private QRCodeService qrCodeService;
 
     @PostMapping("/add")
     public Vehicule addVehicle(@RequestBody Vehicule vehicle) {
@@ -61,18 +67,27 @@ public class VehiculeController {
         return ResponseEntity.ok(vehicleInterface.updateStatutVehicule(id, statut));
     }
 
-    @GetMapping
-    public ResponseEntity<List<Vehicule>> getVehicules(
-            @RequestParam(required = false) TypeVehicule type,
-            @RequestParam(required = false) StatutVehicule statut) {
-
-        if (type != null && statut != null) {
-            return ResponseEntity.ok(vehicleRepository.findByTypeVehiculeAndStatutVehicule(type, statut));
-        } else if (type != null) {
-            return ResponseEntity.ok(vehicleRepository.findByTypeVehicule(type));
-        } else if (statut != null) {
-            return ResponseEntity.ok(vehicleRepository.findByStatutVehicule(statut));
+    @GetMapping("/getVehicleQRCode/{id}")
+    public ResponseEntity<String> getVehicleQRCode(@PathVariable Long id) {
+        // Récupérer le véhicule par ID
+        Vehicule vehicule = vehicleInterface.getVehicleById(id);
+        if (vehicule == null) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(vehicleRepository.findAll());
+
+        // Si le QR code est null ou vide, on le génère
+        if (vehicule.getQrCode() == null || vehicule.getQrCode().isEmpty()) {
+            try {
+                String qrCode = qrCodeService.generateQRCode(vehicule.getId().toString());
+                vehicule.setQrCode(qrCode);
+                // Vous pouvez aussi sauvegarder le QR code dans votre base de données ici
+            } catch (WriterException | IOException e) {
+                // Gérer l'exception en fonction de votre logique d'erreur
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur lors de la génération du QR code.");
+            }
+        }
+
+        // Retourner le QR Code généré (ou l'URL en Base64)
+        return ResponseEntity.ok(vehicule.getQrCode());
     }
 }

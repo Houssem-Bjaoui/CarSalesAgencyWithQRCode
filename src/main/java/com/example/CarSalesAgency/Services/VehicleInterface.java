@@ -1,6 +1,8 @@
 package com.example.CarSalesAgency.Services;
 
+
 import com.example.CarSalesAgency.Entities.Vehicule;
+
 import com.example.CarSalesAgency.enums.StatutVehicule;
 import com.example.CarSalesAgency.enums.TypeVehicule;
 
@@ -16,7 +18,5 @@ public interface VehicleInterface {
     Vehicule updateTypeVehicule(Long id, TypeVehicule newType);
     Vehicule updateStatutVehicule(Long id, StatutVehicule newStatut);
 }
-
-
 
 

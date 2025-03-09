@@ -47,5 +47,8 @@ public class User {
 
     @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private  List<TestDrive> testDrives;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Favoris> favorises ;
 }
 

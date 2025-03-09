@@ -82,4 +82,13 @@ public class Vehicule {
 
     @OneToMany(mappedBy = "vehicule" , cascade = CascadeType.ALL , fetch =  FetchType.LAZY)
     private List<TestDrive> testDrives;
+
+@OneToMany(mappedBy = "vehicule", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private List<Favoris> favoris;
+
+
+    @Lob
+    @Column(columnDefinition = "TEXT") // Stockage en base64
+    private String qrCode;
+
 }
