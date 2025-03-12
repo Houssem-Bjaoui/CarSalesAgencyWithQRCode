@@ -3,7 +3,7 @@ package com.example.CarSalesAgency.ServiceImplement;
 import com.example.CarSalesAgency.Entities.Comment;
 import com.example.CarSalesAgency.Repository.CommentRepository;
 import com.example.CarSalesAgency.Services.CommentInterface;
-import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

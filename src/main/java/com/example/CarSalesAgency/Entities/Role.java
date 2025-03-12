@@ -7,7 +7,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -20,7 +22,8 @@ public class Role {
 
     @Enumerated(EnumType.STRING)
     private UserRole rolename;
-@JsonIgnore
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> users= new HashSet<>();
+
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<User> users = new ArrayList<>();
+
 }
