@@ -1,0 +1,51 @@
+server:
+  port: 8081
+
+lombok:
+  addLombokGeneratedAnnotation: true
+
+spring:
+  application:
+    name: CarAgency
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/CarAgency?createDatabaseIfNotExist=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: root
+    password: ""
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+  security:
+    oauth2:
+      client:
+        registration:
+          demo:
+            client-id: demo
+            client-secret: vTWM1bzEzIqLxnCIMngFJvajZ3laX6Sb
+            provider: keycloak
+            scope: openid, profile, email
+            authorization-grant-type: client_credentials
+
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8086/realms/master
+            token-uri: http://localhost:8086/realms/master/protocol/openid-connect/token
+            authorization-uri: http://localhost:8086/realms/master/protocol/openid-connect/auth
+            user-info-uri: http://localhost:8086/realms/master/protocol/openid-connect/userinfo
+            jwk-set-uri: http://localhost:8086/realms/master/protocol/openid-connect/certs
+
+access:
+  control:
+    origin: http://localhost:4200
+
+logging:
+  level:
+    org.springframework.security: trace
+
+
