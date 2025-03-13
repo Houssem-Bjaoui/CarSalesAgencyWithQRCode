@@ -38,10 +38,15 @@ public class SecurityConfig {
     //JwtAuthenticationProvider, qui est un fournisseur d'authentification utilisé par Spring Security.
     //Ce composant utilise le JwtDecoder (créé dans la méthode précédente) pour authentifier les utilisateurs en fonction des JWT reçus.
 
-//    @Bean
-//    public JwtAuthenticationProvider jwtAuthenticationProvider() {
-//        return new JwtAuthenticationProvider(decode());
-//    }
+   @Bean
+    public JwtAuthenticationProvider jwtAuthenticationProvider() {
+       return new JwtAuthenticationProvider(decode());
+    }
+
+    @Bean
+    public KeycloakConverter customKeycloakConverter() {
+        return new KeycloakConverter();
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, HandlerMappingIntrospector introspector) throws Exception {
@@ -61,13 +66,14 @@ public class SecurityConfig {
                 // Les requêtes OPTIONS sont utilisées pour gérer les pré-demandes CORS par les navigateurs.
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.OPTIONS, "/**")).permitAll()
-//                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/user/getAllusers")).permitAll()
+//                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/users/adduser")).permitAll()
+                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/users/adduser")).hasAuthority("ROLE_ADMIN")
 
                         .anyRequest().authenticated()
                 )  // Configuration de l'authentification via OAuth2 et des tokens JWT
                 .oauth2ResourceServer(oauth2 -> oauth2
                         // Décode les tokens JWT pour authentifier les utilisateurs
-                        .jwt(jwt -> jwt.decoder(decode()))
+                        .jwt(jwt -> jwt.decoder(decode()).jwtAuthenticationConverter(customKeycloakConverter()))
                 )
                 // Définition de la politique de gestion des sessions comme "stateless"
                 // "Stateless" signifie qu'aucune session n'est conservée entre les requêtes. Chaque requête est authentifiée par un token JWT.
