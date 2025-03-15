@@ -66,8 +66,8 @@ public class SecurityConfig {
                 // Les requêtes OPTIONS sont utilisées pour gérer les pré-demandes CORS par les navigateurs.
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.OPTIONS, "/**")).permitAll()
-//                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/users/adduser")).permitAll()
-                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/users/adduser")).hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/api/auth/**")).permitAll()
+
 
                         .anyRequest().authenticated()
                 )  // Configuration de l'authentification via OAuth2 et des tokens JWT
