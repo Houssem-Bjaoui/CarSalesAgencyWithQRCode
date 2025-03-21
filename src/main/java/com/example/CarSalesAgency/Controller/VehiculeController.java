@@ -1,7 +1,6 @@
 package com.example.CarSalesAgency.Controller;
 
 import com.example.CarSalesAgency.Entities.Vehicule;
-import com.example.CarSalesAgency.Repository.VehicleRepository;
 import com.example.CarSalesAgency.ServiceImplement.QRCodeService;
 import com.example.CarSalesAgency.Services.VehicleInterface;
 import com.example.CarSalesAgency.enums.StatutVehicule;
@@ -16,7 +15,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/vehicles")
+@RequestMapping("/vehicules")
 public class VehiculeController {
 
     @Autowired
@@ -32,7 +31,7 @@ public class VehiculeController {
         return vehicleInterface.addVehicle(vehicle);
     }
 
-    @PatchMapping("/updateVehicle/{idv}")
+    @PatchMapping("/updateVehicule/{idv}")
     public Vehicule updateVehicle(@PathVariable("idv") Long id, @RequestBody Vehicule vehicle) {
         return vehicleInterface.updateVehicle(id, vehicle);
     }
@@ -42,17 +41,17 @@ public class VehiculeController {
         return vehicleInterface.getAllVehicle();
     }
 
-    @GetMapping("/getVehicleById/{id}")
+    @GetMapping("/getVehiculeById/{id}")
     public Vehicule getVehicleById(@PathVariable Long id) {
         return vehicleInterface.getVehicleById(id);
     }
 
-    @DeleteMapping("/deleteVehicle/{idv}")
+    @DeleteMapping("/deleteVehicule/{idv}")
     public void deleteVehicle(@PathVariable("idv") Long id) {
         vehicleInterface.deleteVehicle(id);
     }
 
-    @PostMapping("/addListVehicle")
+    @PostMapping("/addListVehicule")
     public List<Vehicule> addListVehicles(@RequestBody List<Vehicule> vehicles) {
         return vehicleInterface.addListVehicles(vehicles);
     }

@@ -65,6 +65,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.OPTIONS, "/**")).permitAll()
                         .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/api/auth/**")).permitAll()
+                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.OPTIONS, "comments/**")).permitAll()
+                        // Seuls les utilisateurs avec le rôle ADMIN peuvent modifier ou supprimer des test drives
+                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.PUT, "/testDrive/**")).permitAll()
+                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.DELETE, "/testDrive/**")).permitAll()
+                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.DELETE, "/testDrive/**")).permitAll()
 
 
                         .anyRequest().authenticated()

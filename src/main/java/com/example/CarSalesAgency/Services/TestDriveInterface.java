@@ -18,12 +18,15 @@ public interface TestDriveInterface {
     // Récupérer tous les test drives
     List<TestDrive> getAllTestDrives();
 
-    // Récupérer les test drives par utilisateur
-    List<TestDrive> getTestDrivesByUser(Long userId);
+    // Récupérer les test drives par utilisateur (ID utilisateur de type String pour Keycloak)
+    List<TestDrive> getTestDrivesByUser(String userId);
 
     // Récupérer les test drives par voiture
     List<TestDrive> getTestDrivesByCar(Long carId);
 
     // Récupérer les test drives par statut
     List<TestDrive> getTestDrivesByStatus(TestDriveStatus status);
+
+    // Récupérer un test drive par son ID
+    TestDrive getTestDriveById(Long id);
 }

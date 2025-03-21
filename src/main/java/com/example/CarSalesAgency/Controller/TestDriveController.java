@@ -1,11 +1,14 @@
 package com.example.CarSalesAgency.Controller;
 
 import com.example.CarSalesAgency.Entities.TestDrive;
+import com.example.CarSalesAgency.Entities.User;
+import com.example.CarSalesAgency.ServiceImplement.KeycloakUserService;
 import com.example.CarSalesAgency.Services.TestDriveInterface;
 import com.example.CarSalesAgency.enums.TestDriveStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,23 +17,57 @@ import java.util.List;
 @RequestMapping("testDrive")
 public class TestDriveController {
 
-@Autowired
+    @Autowired
     private TestDriveInterface testDriveInterface;
 
-    @PostMapping
-    public ResponseEntity<TestDrive> createTestDrive(@RequestBody TestDrive testDrive) {
+    @Autowired
+    private KeycloakUserService keycloakUserService;
+
+    @PostMapping("add")
+    public ResponseEntity<TestDrive> createTestDrive(
+            Authentication authentication,
+            @RequestBody TestDrive testDrive
+    ) {
+        // Récupérer l'utilisateur authentifié
+        User currentUser = keycloakUserService.getCurrentUser(authentication);
+        testDrive.setUser(currentUser); // Associer l'utilisateur authentifié au test drive
         TestDrive savedTestDrive = testDriveInterface.createTestDrive(testDrive);
         return new ResponseEntity<>(savedTestDrive, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<TestDrive> updateTestDrive(@PathVariable Long id, @RequestBody TestDrive testDriveDetails) {
+    @PutMapping("update/{id}")
+    public ResponseEntity<TestDrive> updateTestDrive(
+            Authentication authentication,
+            @PathVariable Long id,
+            @RequestBody TestDrive testDriveDetails
+    ) {
+        // Récupérer l'utilisateur authentifié
+        User currentUser = keycloakUserService.getCurrentUser(authentication);
+
+        // Vérifier que l'utilisateur est bien l'auteur du test drive
+        TestDrive existingTestDrive = testDriveInterface.getTestDriveById(id);
+        if (!existingTestDrive.getUser().getId().equals(currentUser.getId())) {
+            throw new RuntimeException("Action non autorisée : vous n'êtes pas l'auteur de ce test drive");
+        }
+
         TestDrive updatedTestDrive = testDriveInterface.updateTestDrive(id, testDriveDetails);
         return ResponseEntity.ok(updatedTestDrive);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTestDrive(@PathVariable Long id) {
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity<Void> deleteTestDrive(
+            Authentication authentication,
+            @PathVariable Long id
+    ) {
+        // Récupérer l'utilisateur authentifié
+        User currentUser = keycloakUserService.getCurrentUser(authentication);
+
+        // Vérifier que l'utilisateur est bien l'auteur du test drive
+        TestDrive existingTestDrive = testDriveInterface.getTestDriveById(id);
+        if (!existingTestDrive.getUser().getId().equals(currentUser.getId())) {
+            throw new RuntimeException("Action non autorisée : vous n'êtes pas l'auteur de ce test drive");
+        }
+
         testDriveInterface.deleteTestDrive(id);
         return ResponseEntity.noContent().build();
     }
@@ -41,9 +78,11 @@ public class TestDriveController {
         return ResponseEntity.ok(testDrives);
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<TestDrive>> getTestDrivesByUser(@PathVariable Long userId) {
-        List<TestDrive> testDrives = testDriveInterface.getTestDrivesByUser(userId);
+    @GetMapping("/me")
+    public ResponseEntity<List<TestDrive>> getMyTestDrives(Authentication authentication) {
+        // Récupérer l'utilisateur authentifié
+        User currentUser = keycloakUserService.getCurrentUser(authentication);
+        List<TestDrive> testDrives = testDriveInterface.getTestDrivesByUser(currentUser.getId());
         return ResponseEntity.ok(testDrives);
     }
 

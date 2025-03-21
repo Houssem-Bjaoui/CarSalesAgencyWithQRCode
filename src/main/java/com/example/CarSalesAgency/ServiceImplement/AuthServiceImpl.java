@@ -1,7 +1,9 @@
 package com.example.CarSalesAgency.ServiceImplement;
 
 import com.example.CarSalesAgency.Entities.*;
+import com.example.CarSalesAgency.Repository.UserRepository;
 import com.example.CarSalesAgency.Services.AuthService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,9 @@ import java.util.*;
 
 @Service
 public class AuthServiceImpl implements AuthService {
+
+    @Autowired
+    private UserRepository userRepository;
 
     private final RestTemplate restTemplate;
     private final String keycloakBaseUrl;
@@ -89,7 +94,7 @@ public class AuthServiceImpl implements AuthService {
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(userRepresentation, headers);
 
         try {
-            // Étape 1: Créer l'utilisateur
+            // Étape 1: Créer l'utilisateur dans Keycloak
             restTemplate.postForEntity(userEndpoint, request, Void.class);
 
             // Étape 2: Récupérer l'ID de l'utilisateur créé
@@ -106,6 +111,16 @@ public class AuthServiceImpl implements AuthService {
                         .body(Map.of("error", "User created but failed to assign CLIENT role"));
             }
 
+            // Étape 4: Enregistrer l'utilisateur dans la base de données SQL locale
+            User newUser = new User();
+            newUser.setId(userId); // ID Keycloak
+            newUser.setUsername(registrationRequest.getUsername());
+            newUser.setEmail(registrationRequest.getEmail());
+            newUser.setFirstName(registrationRequest.getFirstName());
+            newUser.setLastName(registrationRequest.getLastName());
+
+            userRepository.save(newUser); // Enregistrer dans la base de données SQL locale
+
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(Map.of("message", "User created successfully with CLIENT role"));
         } catch (Exception e) {
@@ -113,7 +128,6 @@ public class AuthServiceImpl implements AuthService {
                     .body(Map.of("error", "Failed to create user", "message", e.getMessage()));
         }
     }
-
     // Méthodes helper (getAdminToken, getUserIdByUsername, etc.) déplacées ici
     private String getAdminToken() {
         String tokenEndpoint = keycloakBaseUrl + "/realms/" + keycloakRealm + "/protocol/openid-connect/token";

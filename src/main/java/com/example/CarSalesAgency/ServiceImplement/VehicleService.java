@@ -2,7 +2,7 @@ package com.example.CarSalesAgency.ServiceImplement;
 
 import com.example.CarSalesAgency.Entities.Vehicule;
 
-import com.example.CarSalesAgency.Repository.VehicleRepository;
+import com.example.CarSalesAgency.Repository.VehiculeRepository;
 
 import com.example.CarSalesAgency.Services.VehicleInterface;
 import com.example.CarSalesAgency.enums.StatutVehicule;
@@ -19,7 +19,7 @@ import java.util.List;
 public class VehicleService implements VehicleInterface {
 
     @Autowired
-    private VehicleRepository vehicleRepository;
+    private VehiculeRepository vehicleRepository;
 
     @Autowired
     private QRCodeService qrCodeService;

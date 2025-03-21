@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface FavorisInterface {
 
-    Favoris addToFavoris(Long userId, Long vehiculeId);
+    Favoris addToFavoris(String userId, Long vehiculeId);
 
-    void removeFromFavoris(Long userId, Long vehiculeId);
+    void removeFromFavoris(String userId, Long vehiculeId);
 
-    List<Favoris> getFavorisByUser(Long userId);
+    List<Favoris> getFavorisByUser(String userId);
 }
