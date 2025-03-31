@@ -8,7 +8,9 @@ import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "vehicules")
@@ -59,6 +61,10 @@ public class Vehicule {
     @NotNull
     private String carrosserie;
 
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
     @Enumerated(EnumType.STRING)
     private TypeVehicule typeVehicule;
 
@@ -73,19 +79,25 @@ public class Vehicule {
         createdAt = new Date();
     }
 
-
     @OneToMany(mappedBy = "vehicule", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "vehicule" , cascade = CascadeType.ALL , fetch =  FetchType.LAZY)
+    @OneToMany(mappedBy = "vehicule", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TestDrive> testDrives;
 
-@OneToMany(mappedBy = "vehicule", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "vehicule", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Favoris> favoris;
-
 
     @Lob
     @Column(columnDefinition = "TEXT") // Stockage en base64
     private String qrCode;
 
+    // Relation many-to-many avec Feature
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "vehicule_features",
+            joinColumns = @JoinColumn(name = "vehicule_id"),
+            inverseJoinColumns = @JoinColumn(name = "feature_id")
+    )
+    private Set<Feature> features = new HashSet<>();
 }

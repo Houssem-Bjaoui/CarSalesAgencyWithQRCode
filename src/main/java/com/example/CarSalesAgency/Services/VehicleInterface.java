@@ -17,6 +17,7 @@ public interface VehicleInterface {
     List<Vehicule> addListVehicles(List<Vehicule> listVehicles);
     Vehicule updateTypeVehicule(Long id, TypeVehicule newType);
     Vehicule updateStatutVehicule(Long id, StatutVehicule newStatut);
+    public Vehicule updateVehicleFeatures(Long id, List<Long> featureIds);
 }
 
 

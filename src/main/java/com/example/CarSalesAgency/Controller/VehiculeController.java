@@ -1,7 +1,10 @@
 package com.example.CarSalesAgency.Controller;
 
+import com.example.CarSalesAgency.DTO.VehiculeRequestDTO;
+import com.example.CarSalesAgency.Entities.Feature;
 import com.example.CarSalesAgency.Entities.Vehicule;
 import com.example.CarSalesAgency.ServiceImplement.QRCodeService;
+import com.example.CarSalesAgency.Services.FeatureInterface;
 import com.example.CarSalesAgency.Services.VehicleInterface;
 import com.example.CarSalesAgency.enums.StatutVehicule;
 import com.example.CarSalesAgency.enums.TypeVehicule;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/vehicules")
@@ -26,9 +30,38 @@ public class VehiculeController {
     @Autowired
     private QRCodeService qrCodeService;
 
+    @Autowired
+    private FeatureInterface featureInterface;
+
     @PostMapping("/add")
     public Vehicule addVehicle(@RequestBody Vehicule vehicle) {
         return vehicleInterface.addVehicle(vehicle);
+    }
+
+    @PostMapping("/add-with-features")
+    public ResponseEntity<Vehicule> addVehicleWithFeatures(@RequestBody VehiculeRequestDTO dto) {
+        Vehicule vehicule = new Vehicule();
+        vehicule.setMarque(dto.getMarque());
+        vehicule.setModele(dto.getModele());
+        vehicule.setAnneeFabrication(dto.getAnneeFabrication());
+        vehicule.setPrix(dto.getPrix());
+        vehicule.setKilometrage(dto.getKilometrage());
+        vehicule.setMiseEnCirculation(dto.getMiseEnCirculation());
+        vehicule.setEnergie(dto.getEnergie());
+        vehicule.setBoiteVitesse(dto.getBoiteVitesse());
+        vehicule.setPuissanceFiscale(dto.getPuissanceFiscale());
+        vehicule.setCarrosserie(dto.getCarrosserie());
+        vehicule.setDescription(dto.getDescription());
+        vehicule.setTypeVehicule(dto.getTypeVehicule());
+
+        // Ajouter les features si présentes
+        if (dto.getFeatureIds() != null && !dto.getFeatureIds().isEmpty()) {
+            Set<Feature> features = featureInterface.getFeaturesByIds(dto.getFeatureIds());
+            vehicule.setFeatures(features);
+        }
+
+        Vehicule savedVehicule = vehicleInterface.addVehicle(vehicule);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedVehicule);
     }
 
     @PatchMapping("/updateVehicule/{idv}")
