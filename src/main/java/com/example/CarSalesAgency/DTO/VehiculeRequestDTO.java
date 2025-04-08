@@ -20,4 +20,5 @@ public class VehiculeRequestDTO {
     private String description;
     private TypeVehicule typeVehicule;
     private List<Long> featureIds;
+    private Long fileId;
 }

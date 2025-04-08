@@ -66,10 +66,16 @@ public class SecurityConfig {
                         .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.OPTIONS, "/**")).permitAll()
                         .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/api/auth/**")).permitAll()
                         .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.OPTIONS, "comments/**")).permitAll()
-                        // Seuls les utilisateurs avec le rôle ADMIN peuvent modifier ou supprimer des test drives
+
                         .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.PUT, "/testDrive/**")).permitAll()
                         .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.DELETE, "/testDrive/**")).permitAll()
                         .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.DELETE, "/testDrive/**")).permitAll()
+                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/vehicules/**")).permitAll()
+                        // Ajouter cette ligne pour permettre l'upload de fichiers sans authentification
+                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/file/upload")).permitAll()
+                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/features/**")).permitAll()
+                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/features/**")).permitAll()
+
 
 
                         .anyRequest().authenticated()

@@ -2,7 +2,9 @@ package com.example.CarSalesAgency.Controller;
 
 import com.example.CarSalesAgency.DTO.VehiculeRequestDTO;
 import com.example.CarSalesAgency.Entities.Feature;
+import com.example.CarSalesAgency.Entities.File;
 import com.example.CarSalesAgency.Entities.Vehicule;
+import com.example.CarSalesAgency.ServiceImplement.FileService;
 import com.example.CarSalesAgency.ServiceImplement.QRCodeService;
 import com.example.CarSalesAgency.Services.FeatureInterface;
 import com.example.CarSalesAgency.Services.VehicleInterface;
@@ -17,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
-
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/vehicules")
 public class VehiculeController {
@@ -25,7 +27,8 @@ public class VehiculeController {
     @Autowired
     private VehicleInterface vehicleInterface;
 
-
+    @Autowired
+    private FileService fileService;
 
     @Autowired
     private QRCodeService qrCodeService;
@@ -39,8 +42,16 @@ public class VehiculeController {
     }
 
     @PostMapping("/add-with-features")
-    public ResponseEntity<Vehicule> addVehicleWithFeatures(@RequestBody VehiculeRequestDTO dto) {
+    public ResponseEntity<Vehicule> addVehicleWithFeatures(@RequestBody VehiculeRequestDTO dto,
+                                                           @RequestParam(required = false) Long fileId) {
+
         Vehicule vehicule = new Vehicule();
+
+        if(fileId != null) {
+            File file = fileService.getFileById(fileId);
+             vehicule.setImageFile(file);
+        }
+
         vehicule.setMarque(dto.getMarque());
         vehicule.setModele(dto.getModele());
         vehicule.setAnneeFabrication(dto.getAnneeFabrication());

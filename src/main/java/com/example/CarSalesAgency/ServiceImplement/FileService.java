@@ -70,6 +70,12 @@ public class FileService implements FileInterface {
         // Vérifie si un fichier avec le même nom existe déjà dans la base de données
         return fileRepository.findFileByFilename(filename).isPresent();
     }
+
+    public File getFileById(Long fileId) {
+        return fileRepository.findById(fileId)
+                .orElseThrow(() -> new RuntimeException("File not found"));
+    }
+
 }
 
 

@@ -100,4 +100,11 @@ public class Vehicule {
             inverseJoinColumns = @JoinColumn(name = "feature_id")
     )
     private Set<Feature> features = new HashSet<>();
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "file_id", referencedColumnName = "id")
+    private File imageFile;
+
+
+
 }
