@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
+
+
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/vehicules")
@@ -42,14 +44,13 @@ public class VehiculeController {
     }
 
     @PostMapping("/add-with-features")
-    public ResponseEntity<Vehicule> addVehicleWithFeatures(@RequestBody VehiculeRequestDTO dto,
-                                                           @RequestParam(required = false) Long fileId) {
+    public ResponseEntity<Vehicule> addVehicleWithFeatures(@RequestBody VehiculeRequestDTO dto) {
+        Long fileId = dto.getFileId(); // Récupérer fileId du DTO
 
         Vehicule vehicule = new Vehicule();
-
-        if(fileId != null) {
+        if (fileId != null) {
             File file = fileService.getFileById(fileId);
-             vehicule.setImageFile(file);
+            vehicule.setImageFile(file);
         }
 
         vehicule.setMarque(dto.getMarque());

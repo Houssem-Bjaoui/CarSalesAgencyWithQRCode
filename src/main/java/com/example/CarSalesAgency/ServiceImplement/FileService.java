@@ -26,31 +26,29 @@ public class FileService implements FileInterface {
         this.fileRepository = fileRepository;
     }
 
+    // Ajoutez cette méthode dans la classe FileService
+    public File saveUploadedFile(MultipartFile file) throws IOException {
+        File newFile = new File();
+        newFile.setFilename(file.getOriginalFilename());
+        newFile.setContentType(file.getContentType());
+        newFile.setSize(file.getSize());
+        newFile.setData(file.getBytes());
+        return fileRepository.save(newFile);
+    }
+
+    // Modifiez la méthode existante uploadFile
     @Override
     public ResponseEntity<?> uploadFile(MultipartFile fileToBeUploaded) {
         try {
-            // Vérifie si le fichier existe déjà dans la base de données
             if (!this.fileExists(fileToBeUploaded.getOriginalFilename())) {
-                // Crée un nouvel objet File
-                File file = new File();
-                file.setFilename(fileToBeUploaded.getOriginalFilename());
-                file.setContentType(fileToBeUploaded.getContentType());
-                file.setSize(fileToBeUploaded.getSize());
-                file.setData(fileToBeUploaded.getBytes());
-
-                // Sauvegarde le fichier dans la base de données
-                fileRepository.save(file);
-
-                // Retourne une réponse de succès
-                return new ResponseEntity<>("File Uploaded Successfully: " + file.getFilename(), HttpStatus.CREATED);
+                File savedFile = this.saveUploadedFile(fileToBeUploaded); // Utilisation de la nouvelle méthode
+                return new ResponseEntity<>(savedFile, HttpStatus.CREATED);
             } else {
-                // Retourne une réponse de conflit si le fichier existe déjà
                 return new ResponseEntity<>("File already exists", HttpStatus.CONFLICT);
             }
         } catch (IOException e) {
-            LOGGER.error("Error getting data from file: " + e.getMessage(), e);
-            // Retourne une réponse d'erreur si une exception est levée
-            return new ResponseEntity<>("Error when getting data from file", HttpStatus.BAD_REQUEST);
+            LOGGER.error("Error saving file: " + e.getMessage(), e);
+            return new ResponseEntity<>("File upload failed", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -66,7 +64,7 @@ public class FileService implements FileInterface {
     }
 
 
-    private boolean fileExists(String filename) {
+    public boolean fileExists(String filename) {
         // Vérifie si un fichier avec le même nom existe déjà dans la base de données
         return fileRepository.findFileByFilename(filename).isPresent();
     }

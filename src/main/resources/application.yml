@@ -27,7 +27,7 @@ spring:
         registration:
           demo:
             client-id: angular
-            client-secret: nXbm8OXcnfBJCCNQY0wTtnupI3j9xTFz
+            client-secret: N48f3liEcr2TOfLsSQpFZiuxzbNGmU9A
             provider: keycloak
             scope: openid, profile, email
             authorization-grant-type: client_credentials

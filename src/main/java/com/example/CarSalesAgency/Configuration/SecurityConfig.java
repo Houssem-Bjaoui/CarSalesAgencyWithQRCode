@@ -36,9 +36,9 @@ public class SecurityConfig {
     //JwtAuthenticationProvider, qui est un fournisseur d'authentification utilisé par Spring Security.
     //Ce composant utilise le JwtDecoder (créé dans la méthode précédente) pour authentifier les utilisateurs en fonction des JWT reçus.
 
-   @Bean
+    @Bean
     public JwtAuthenticationProvider jwtAuthenticationProvider() {
-       return new JwtAuthenticationProvider(decode());
+        return new JwtAuthenticationProvider(decode());
     }
 
     @Bean
