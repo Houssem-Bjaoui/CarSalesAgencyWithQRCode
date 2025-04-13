@@ -17,6 +17,9 @@ public class File {
         @Column(columnDefinition = "LONGBLOB")
         private byte[] data;
 
+
+
+
     public File(String filename, String contentType, long size, byte[] data) {
         this.filename = filename;
         this.contentType = contentType;

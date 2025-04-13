@@ -19,8 +19,8 @@ import java.nio.file.Path;
 @Service
 public class QRCodeService implements QRCodeInterface {
 
-    private static final int WIDTH = 300;
-    private static final int HEIGHT = 300;
+    private static final int WIDTH = 500;
+    private static final int HEIGHT = 500;
 
     @Override
     public String generateQRCode(String text) throws WriterException, IOException {

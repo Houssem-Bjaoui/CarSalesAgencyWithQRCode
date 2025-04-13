@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -56,6 +58,23 @@ public class FileController {
             return new ResponseEntity<>("File not found", HttpStatus.NOT_FOUND);
         }
 
+    }
+
+    @PostMapping("/upload-multiple")
+    public ResponseEntity<List<Map<String, Object>>> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
+        try {
+            List<Map<String, Object>> responses = new ArrayList<>();
+            for (MultipartFile file : files) {
+                File savedFile = fileService.saveUploadedFile(file);
+                Map<String, Object> response = new HashMap<>();
+                response.put("id", savedFile.getId());
+                response.put("filename", savedFile.getFilename());
+                responses.add(response);
+            }
+            return new ResponseEntity<>(responses, HttpStatus.CREATED);
+        } catch (IOException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
 

@@ -17,8 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -43,38 +42,56 @@ public class VehiculeController {
         return vehicleInterface.addVehicle(vehicle);
     }
 
-    @PostMapping("/add-with-features")
-    public ResponseEntity<Vehicule> addVehicleWithFeatures(@RequestBody VehiculeRequestDTO dto) {
-        Long fileId = dto.getFileId(); // Récupérer fileId du DTO
+    @PostMapping("/add-with-features-and-images")
+    public ResponseEntity<Vehicule> addVehiculeWithFeaturesAndImages(
+            @RequestBody VehiculeRequestDTO request) {
 
-        Vehicule vehicule = new Vehicule();
-        if (fileId != null) {
-            File file = fileService.getFileById(fileId);
-            vehicule.setImageFile(file);
+        try {
+            // Conversion du DTO vers l'entité
+            Vehicule vehicule = new Vehicule();
+            vehicule.setMarque(request.getMarque());
+            vehicule.setModele(request.getModele());
+            vehicule.setAnneeFabrication(request.getAnneeFabrication());
+            vehicule.setPrix(request.getPrix());
+            vehicule.setKilometrage(request.getKilometrage());
+            vehicule.setMiseEnCirculation(request.getMiseEnCirculation());
+            vehicule.setEnergie(request.getEnergie());
+            vehicule.setBoiteVitesse(request.getBoiteVitesse());
+            vehicule.setPuissanceFiscale(request.getPuissanceFiscale());
+            vehicule.setCarrosserie(request.getCarrosserie());
+            vehicule.setDescription(request.getDescription());
+            vehicule.setTypeVehicule(request.getTypeVehicule());
+
+            // Sauvegarde initiale
+            Vehicule savedVehicule = vehicleInterface.addVehicle(vehicule);
+
+            // Gestion des images
+            if (request.getFileIds() != null && !request.getFileIds().isEmpty()) {
+                List<File> newFiles = fileService.getFilesByIds(request.getFileIds());
+
+                // Ajoute les nouvelles images à celles déjà existantes
+                List<File> existingFiles = savedVehicule.getImages();
+                existingFiles.addAll(newFiles);
+
+                savedVehicule.setImages(existingFiles);
+                savedVehicule = vehicleInterface.updateVehicle(savedVehicule.getId(), savedVehicule);
+            }
+
+
+            // Gestion des features
+            if (request.getFeatureIds() != null && !request.getFeatureIds().isEmpty()) {
+                Set<Feature> features = featureInterface.getFeaturesByIds(request.getFeatureIds());
+                savedVehicule.setFeatures(features);
+                savedVehicule = vehicleInterface.updateVehicle(savedVehicule.getId(), savedVehicule);
+            }
+
+            return ResponseEntity.ok(savedVehicule);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-
-        vehicule.setMarque(dto.getMarque());
-        vehicule.setModele(dto.getModele());
-        vehicule.setAnneeFabrication(dto.getAnneeFabrication());
-        vehicule.setPrix(dto.getPrix());
-        vehicule.setKilometrage(dto.getKilometrage());
-        vehicule.setMiseEnCirculation(dto.getMiseEnCirculation());
-        vehicule.setEnergie(dto.getEnergie());
-        vehicule.setBoiteVitesse(dto.getBoiteVitesse());
-        vehicule.setPuissanceFiscale(dto.getPuissanceFiscale());
-        vehicule.setCarrosserie(dto.getCarrosserie());
-        vehicule.setDescription(dto.getDescription());
-        vehicule.setTypeVehicule(dto.getTypeVehicule());
-
-        // Ajouter les features si présentes
-        if (dto.getFeatureIds() != null && !dto.getFeatureIds().isEmpty()) {
-            Set<Feature> features = featureInterface.getFeaturesByIds(dto.getFeatureIds());
-            vehicule.setFeatures(features);
-        }
-
-        Vehicule savedVehicule = vehicleInterface.addVehicle(vehicule);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedVehicule);
     }
+
 
     @PatchMapping("/updateVehicule/{idv}")
     public Vehicule updateVehicle(@PathVariable("idv") Long id, @RequestBody Vehicule vehicle) {

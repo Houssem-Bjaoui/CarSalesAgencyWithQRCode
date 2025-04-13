@@ -12,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -63,6 +65,9 @@ public class FileService implements FileInterface {
         }
     }
 
+    public List<File> getFilesByIds(List<Long> fileIds) {
+        return fileRepository.findAllById(fileIds);
+    }
 
     public boolean fileExists(String filename) {
         // Vérifie si un fichier avec le même nom existe déjà dans la base de données
@@ -72,6 +77,14 @@ public class FileService implements FileInterface {
     public File getFileById(Long fileId) {
         return fileRepository.findById(fileId)
                 .orElseThrow(() -> new RuntimeException("File not found"));
+    }
+
+    public List<File> saveMultipleFiles(MultipartFile[] files) throws IOException {
+        List<File> savedFiles = new ArrayList<>();
+        for (MultipartFile file : files) {
+            savedFiles.add(saveUploadedFile(file));
+        }
+        return savedFiles;
     }
 
 }
