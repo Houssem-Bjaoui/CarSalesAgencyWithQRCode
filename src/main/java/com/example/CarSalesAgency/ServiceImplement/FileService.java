@@ -55,15 +55,12 @@ public class FileService implements FileInterface {
     }
 
     @Override
-    public ResponseEntity<?> downloadFile(String filename) {
-        Optional<File> optionalFile = this.fileRepository.findFileByFilename(filename);
-        if(optionalFile.isPresent()) {
-            File file = optionalFile.get();
-            return new ResponseEntity<>(file, HttpStatus.OK);
-        }else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public Optional<File> downloadFile(String filename) {
+        return fileRepository.findFileByFilename(filename);
     }
+
+
+
 
     public List<File> getFilesByIds(List<Long> fileIds) {
         return fileRepository.findAllById(fileIds);

@@ -12,10 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -48,17 +45,19 @@ public class FileController {
 
     @GetMapping("download/{filename}")
     public ResponseEntity<?> downloadFile(@PathVariable String filename) {
-        ResponseEntity<?> response = this.fileService.downloadFile(filename);
-        if (response.getStatusCode() == HttpStatus.OK) {
-            File file = (File) response.getBody();
-            return ResponseEntity.ok().contentType(MediaType.parseMediaType(file.getContentType()))
-                    .header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=\""+file.getFilename()+"\"")
+        Optional<File> optionalFile = fileService.downloadFile(filename);
+        if (optionalFile.isPresent()) {
+            File file = optionalFile.get();
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(file.getContentType()))
+                    // Pas besoin de "attachment" si tu veux l’afficher dans <img>
                     .body(file.getData());
-        }else{
-            return new ResponseEntity<>("File not found", HttpStatus.NOT_FOUND);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("File not found");
         }
-
     }
+
+
 
     @PostMapping("/upload-multiple")
     public ResponseEntity<List<Map<String, Object>>> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
