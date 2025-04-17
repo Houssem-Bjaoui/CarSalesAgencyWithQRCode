@@ -47,7 +47,7 @@ public class VehicleService implements VehicleInterface {
         Vehicule existingVehicle = vehicleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Véhicule non trouvé"));
 
-        // Mettre à jour les propriétés du véhicule existant
+        // Mettre à jour uniquement les propriétés de base du véhicule existant
         existingVehicle.setMarque(vehicle.getMarque());
         existingVehicle.setModele(vehicle.getModele());
         existingVehicle.setAnneeFabrication(vehicle.getAnneeFabrication());
@@ -60,15 +60,13 @@ public class VehicleService implements VehicleInterface {
         existingVehicle.setCarrosserie(vehicle.getCarrosserie());
         existingVehicle.setTypeVehicule(vehicle.getTypeVehicule());
         existingVehicle.setDescription(vehicle.getDescription());
-
-        // Si des features sont fournies, les mettre à jour
-        if (vehicle.getFeatures() != null && !vehicle.getFeatures().isEmpty()) {
-            existingVehicle.setFeatures(vehicle.getFeatures());
-        }
+        existingVehicle.setStatutVehicule(vehicle.getStatutVehicule());
 
         try {
-            // Mettre à jour le QR Code
-            existingVehicle.setQrCode(qrCodeService.generateQRCode(existingVehicle.getId().toString()));
+            // Mettre à jour le QR Code si nécessaire
+            if (existingVehicle.getQrCode() == null || existingVehicle.getQrCode().isEmpty()) {
+                existingVehicle.setQrCode(qrCodeService.generateQRCode(existingVehicle.getId().toString()));
+            }
         } catch (WriterException | IOException e) {
             throw new RuntimeException("Erreur lors de la génération du QR Code", e);
         }

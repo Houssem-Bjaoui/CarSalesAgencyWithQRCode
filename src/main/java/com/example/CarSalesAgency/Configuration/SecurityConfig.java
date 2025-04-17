@@ -73,6 +73,7 @@ public class SecurityConfig {
                         .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/vehicules/**")).permitAll()
                         .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/vehicules/**")).permitAll()
                         .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.DELETE, "/vehicules/**")).permitAll()
+                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.PATCH, "/vehicules/**")).permitAll()
                         // Ajouter cette ligne pour permettre l'upload de fichiers sans authentification
                         .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/file/upload")).permitAll()
                         .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/features/**")).permitAll()

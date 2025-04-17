@@ -95,8 +95,34 @@ public class VehiculeController {
 
 
     @PatchMapping("/updateVehicule/{idv}")
-    public Vehicule updateVehicle(@PathVariable("idv") Long id, @RequestBody Vehicule vehicle) {
-        return vehicleInterface.updateVehicle(id, vehicle);
+    public ResponseEntity<Vehicule> updateVehicule(@PathVariable("idv") Long id, @RequestBody VehiculeRequestDTO request) {
+        try {
+            // Créer un objet Vehicule temporaire avec les nouvelles valeurs
+            Vehicule vehiculeToUpdate = new Vehicule();
+            vehiculeToUpdate.setMarque(request.getMarque());
+            vehiculeToUpdate.setModele(request.getModele());
+            vehiculeToUpdate.setAnneeFabrication(request.getAnneeFabrication());
+            vehiculeToUpdate.setPrix(request.getPrix());
+            vehiculeToUpdate.setKilometrage(request.getKilometrage());
+            vehiculeToUpdate.setMiseEnCirculation(request.getMiseEnCirculation());
+            vehiculeToUpdate.setEnergie(request.getEnergie());
+            vehiculeToUpdate.setBoiteVitesse(request.getBoiteVitesse());
+            vehiculeToUpdate.setPuissanceFiscale(request.getPuissanceFiscale());
+            vehiculeToUpdate.setCarrosserie(request.getCarrosserie());
+            vehiculeToUpdate.setDescription(request.getDescription());
+            vehiculeToUpdate.setTypeVehicule(request.getTypeVehicule());
+
+            // Appeler le service pour mettre à jour le véhicule
+            Vehicule updatedVehicule = vehicleInterface.updateVehicle(id, vehiculeToUpdate);
+
+            return ResponseEntity.ok(updatedVehicule);
+        } catch (RuntimeException e) {
+            logger.error("Erreur lors de la mise à jour du véhicule: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            logger.error("Erreur inattendue lors de la mise à jour du véhicule", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @GetMapping("/getAllVehicule")
