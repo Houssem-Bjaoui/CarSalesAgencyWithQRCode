@@ -127,6 +127,7 @@ public class VehiculeController {
 
     @GetMapping("/getAllVehicule")
     public List<Vehicule> getAllVehicles() {
+
         return vehicleInterface.getAllVehicle();
     }
 
