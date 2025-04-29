@@ -1,8 +1,6 @@
 package com.example.CarSalesAgency.Entities;
 
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -14,6 +12,9 @@ import java.util.List;
 @Entity
 @Table(name = "comments")
 @Data
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Comment {
 
     @Id
@@ -34,14 +35,15 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "vehicule_id", referencedColumnName = "id", nullable = false)
+    @JsonBackReference(value = "vehicule-comments")
     private Vehicule vehicule;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    @JsonBackReference(value = "user-comments")
     private User user;
 
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Like> likes;
 }
-
-

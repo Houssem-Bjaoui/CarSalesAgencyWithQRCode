@@ -65,21 +65,21 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.OPTIONS, "/**")).permitAll()
                         .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/auth/**")).permitAll()
-                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.OPTIONS, "comments/**")).permitAll()
-
-                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.PUT, "/testDrive/**")).permitAll()
-                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.DELETE, "/testDrive/**")).permitAll()
-
-                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/vehicules/**")).permitAll()
-                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/vehicules/**")).permitAll()
-                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.DELETE, "/vehicules/**")).permitAll()
-                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.PATCH, "/vehicules/**")).permitAll()
-                        // Ajouter cette ligne pour permettre l'upload de fichiers sans authentification
-                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/file/upload")).permitAll()
-                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/features/**")).permitAll()
-                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/features/**")).permitAll()
+//                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.OPTIONS, "comments/**")).permitAll()
+//
+//                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.PUT, "/testDrive/**")).permitAll()
+//                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.DELETE, "/testDrive/**")).permitAll()
+//
+//                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/vehicules/**")).permitAll()
+  //                      .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/vehicules/**")).permitAll()
+//                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.DELETE, "/vehicules/**")).permitAll()
+//                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.PATCH, "/vehicules/**")).permitAll()
+//                        // Ajouter cette ligne pour permettre l'upload de fichiers sans authentification
+//                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/file/upload")).permitAll()
+//                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/features/**")).permitAll()
+//                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/features/**")).permitAll()
                         .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/file/**")).permitAll()
-                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/file/**")).permitAll()
+//                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/file/**")).permitAll()
 
 
 

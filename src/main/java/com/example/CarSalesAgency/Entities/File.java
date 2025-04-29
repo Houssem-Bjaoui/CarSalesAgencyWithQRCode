@@ -13,9 +13,9 @@ public class File {
         private String contentType;
         private long size;
 
-        @Lob
-        @Column(columnDefinition = "LONGBLOB")
-        private byte[] data;
+    @Lob
+    @Column(length = 16777215) // Pour MySQL (16MB)
+    private byte[] data;
 
 
 

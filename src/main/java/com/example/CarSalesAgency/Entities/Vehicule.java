@@ -2,6 +2,7 @@ package com.example.CarSalesAgency.Entities;
 
 import com.example.CarSalesAgency.enums.StatutVehicule;
 import com.example.CarSalesAgency.enums.TypeVehicule;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -12,6 +13,9 @@ import java.util.*;
 @Entity
 @Table(name = "vehicules")
 @Data
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Vehicule {
 
     @Id
@@ -77,19 +81,21 @@ public class Vehicule {
     }
 
     @OneToMany(mappedBy = "vehicule", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JsonManagedReference(value = "vehicule-comments")
     private List<Comment> comments;
 
     @OneToMany(mappedBy = "vehicule", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<TestDrive> testDrives;
 
     @OneToMany(mappedBy = "vehicule", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Favoris> favoris;
 
     @Lob
-    @Column(columnDefinition = "TEXT") // Stockage en base64
+    @Column(columnDefinition = "TEXT")
     private String qrCode;
 
-    // Relation many-to-many avec Feature
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "vehicule_features",
@@ -100,8 +106,6 @@ public class Vehicule {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "vehicule_id")
+    @JsonIgnoreProperties("vehicule") // Évite la récursion
     private List<File> images = new ArrayList<>();
-
-
-
 }

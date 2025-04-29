@@ -1,21 +1,23 @@
 package com.example.CarSalesAgency.Entities;
 
-
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-
 import java.util.List;
-;
 
 @Entity
 @Table(name = "users")
 @Data
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class User {
 
     @Id
-    private  String id ;
+    private String id;
+
     @Column(nullable = false)
     private String username;
 
@@ -28,19 +30,19 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
-
-
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JsonManagedReference(value = "user-comments")
     private List<Comment> comments;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Like> likes;
 
-    @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private  List<TestDrive> testDrives;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<TestDrive> testDrives;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<Favoris> favorises ;
+    @JsonIgnore
+    private List<Favoris> favorises;
 }
-
