@@ -8,6 +8,7 @@ import com.example.CarSalesAgency.enums.TestDriveStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -62,15 +63,23 @@ public class TestDriveController {
         // Récupérer l'utilisateur authentifié
         User currentUser = keycloakUserService.getCurrentUser(authentication);
 
-        // Vérifier que l'utilisateur est bien l'auteur du test drive
+        // Récupérer le test drive
         TestDrive existingTestDrive = testDriveInterface.getTestDriveById(id);
-        if (!existingTestDrive.getUser().getId().equals(currentUser.getId())) {
+
+        // Vérifier si l'utilisateur est admin
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        // Si l'utilisateur n'est pas admin et pas propriétaire → refuser
+        if (!isAdmin && !existingTestDrive.getUser().getId().equals(currentUser.getId())) {
             throw new RuntimeException("Action non autorisée : vous n'êtes pas l'auteur de ce test drive");
         }
 
         testDriveInterface.deleteTestDrive(id);
         return ResponseEntity.noContent().build();
     }
+
+
 
     @GetMapping
     public ResponseEntity<List<TestDrive>> getAllTestDrives() {
@@ -97,4 +106,7 @@ public class TestDriveController {
         List<TestDrive> testDrives = testDriveInterface.getTestDrivesByStatus(status);
         return ResponseEntity.ok(testDrives);
     }
+
+
+
 }

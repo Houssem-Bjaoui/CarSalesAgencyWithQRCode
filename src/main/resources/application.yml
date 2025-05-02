@@ -48,4 +48,15 @@ logging:
   level:
     org.springframework.security: trace
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: houssembjaoui1234@gmail.com
+    password: aapu xxia psbz jfyf
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
