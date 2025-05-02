@@ -7,5 +7,5 @@ package com.example.CarSalesAgency.enums;
         REJECTED,   // Refusé par l’admin
         COMPLETED,  // Effectué
         CANCELLED   // Annulé
-    }   // Annulé
+    }
 

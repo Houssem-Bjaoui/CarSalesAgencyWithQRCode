@@ -84,6 +84,7 @@ public class SecurityConfig {
 
 
 
+
                         .anyRequest().authenticated()
                 )  // Configuration de l'authentification via OAuth2 et des tokens JWT
                 .oauth2ResourceServer(oauth2 -> oauth2

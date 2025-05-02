@@ -1,9 +1,17 @@
 package com.example.CarSalesAgency.DTO;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class TestDriveDecisionRequest {
+    @NotNull(message = "L'identifiant du test drive est obligatoire.")
     private Long testDriveId;
-    private String decision; // "ACCEPTED" ou "REJECTED"
-    private String message;  // Message personnalisé pour l’email
+
+    @NotBlank(message = "La décision (ACCEPTED ou REJECTED) est obligatoire.")
+    private String decision;
+
+    @NotBlank(message = "Le message ne peut pas être vide.")
+    private String message;
 
     // Getters et setters
 

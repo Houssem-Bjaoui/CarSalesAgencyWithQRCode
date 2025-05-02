@@ -20,6 +20,11 @@ public class TestDrive {
     @Column(name = "test_drive_date")
     private LocalDateTime createdAt;
 
+
+    @Column(name = "decision_date")
+    private LocalDateTime decisionDate;
+
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
