@@ -1,7 +1,9 @@
 package com.example.CarSalesAgency.ServiceImplement;
 
 import com.example.CarSalesAgency.Entities.File;
+import com.example.CarSalesAgency.Entities.User;
 import com.example.CarSalesAgency.Repository.FileRepository;
+import com.example.CarSalesAgency.Repository.UserRepository;
 import com.example.CarSalesAgency.Services.FileInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,10 +24,11 @@ public class FileService implements FileInterface {
     private static final Logger LOGGER = LoggerFactory.getLogger(FileService.class);
 
     private final FileRepository fileRepository;
-
+    private final UserRepository userRepository;
     @Autowired
-    public FileService(FileRepository fileRepository) {
+    public FileService(FileRepository fileRepository, UserRepository userRepository) {
         this.fileRepository = fileRepository;
+        this.userRepository = userRepository;
     }
 
     // Ajoutez cette méthode dans la classe FileService
@@ -83,6 +86,9 @@ public class FileService implements FileInterface {
         }
         return savedFiles;
     }
+
+
+
 
 }
 

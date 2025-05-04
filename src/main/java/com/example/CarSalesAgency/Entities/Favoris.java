@@ -2,7 +2,7 @@ package com.example.CarSalesAgency.Entities;
 
 
 import jakarta.persistence.*;
-import jakarta.persistence.*;
+
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;

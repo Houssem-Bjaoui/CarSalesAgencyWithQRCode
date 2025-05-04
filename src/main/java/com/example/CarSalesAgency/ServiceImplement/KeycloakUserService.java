@@ -1,7 +1,13 @@
 package com.example.CarSalesAgency.ServiceImplement;
 
+import com.example.CarSalesAgency.DTO.UserUpdateDTO;
 import com.example.CarSalesAgency.Entities.User;
 import com.example.CarSalesAgency.Repository.UserRepository;
+import org.keycloak.admin.client.Keycloak;
+import org.keycloak.admin.client.KeycloakBuilder;
+import org.keycloak.admin.client.resource.UserResource;
+import org.keycloak.representations.idm.CredentialRepresentation;
+import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -40,4 +46,36 @@ public class KeycloakUserService {
             return userRepository.save(newUser);
         }
     }
+
+
+    public void updateKeycloakUserProfile(String userId, UserUpdateDTO dto) {
+        Keycloak keycloak = KeycloakBuilder.builder()
+                .serverUrl("http://localhost:8086")
+                .realm("master")
+                .clientId("admin-cli")
+                .username("admin")
+                .password("admin")
+                .build();
+
+        UserResource userResource = keycloak.realm("master").users().get(userId);
+
+        UserRepresentation user = userResource.toRepresentation();
+        user.setFirstName(dto.getFirstName());
+        user.setLastName(dto.getLastName());
+        user.setEmail(dto.getEmail());
+
+        userResource.update(user);
+
+        // ➕ Mise à jour du mot de passe
+        if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
+            CredentialRepresentation newPassword = new CredentialRepresentation();
+            newPassword.setType(CredentialRepresentation.PASSWORD);
+            newPassword.setValue(dto.getPassword());
+            newPassword.setTemporary(false); // false = définitif
+
+            userResource.resetPassword(newPassword);
+        }
+    }
+
+
 }

@@ -81,11 +81,12 @@ public class SecurityConfig {
                         .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/file/**")).permitAll()
 //                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/file/**")).permitAll()
                         .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/send-email")).permitAll()
+                                .requestMatchers("/api/user/profile").hasAnyRole("CLIENT", "ADMIN")
+                                .requestMatchers("/file/upload").hasAnyRole("CLIENT", "ADMIN")
 
 
 
-
-                        .anyRequest().authenticated()
+                                .anyRequest().authenticated()
                 )  // Configuration de l'authentification via OAuth2 et des tokens JWT
                 .oauth2ResourceServer(oauth2 -> oauth2
                         // Décode les tokens JWT pour authentifier les utilisateurs
