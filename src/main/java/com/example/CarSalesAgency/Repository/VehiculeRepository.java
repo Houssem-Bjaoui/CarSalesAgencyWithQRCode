@@ -1,5 +1,6 @@
 package com.example.CarSalesAgency.Repository;
 
+import com.example.CarSalesAgency.DTO.VehiculeSearchCriteria;
 import com.example.CarSalesAgency.Entities.Vehicule;
 import com.example.CarSalesAgency.enums.StatutVehicule;
 import com.example.CarSalesAgency.enums.TypeVehicule;

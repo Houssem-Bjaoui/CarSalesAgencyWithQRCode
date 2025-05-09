@@ -1,8 +1,10 @@
 package com.example.CarSalesAgency.ServiceImplement;
 
+import com.example.CarSalesAgency.DTO.VehiculeSearchCriteria;
 import com.example.CarSalesAgency.Entities.Feature;
 import com.example.CarSalesAgency.Entities.Vehicule;
 import com.example.CarSalesAgency.Repository.VehiculeRepository;
+import com.example.CarSalesAgency.Repository.VehiculeRepositoryCustom;
 import com.example.CarSalesAgency.Services.FeatureInterface;
 import com.example.CarSalesAgency.Services.VehicleInterface;
 import com.example.CarSalesAgency.enums.StatutVehicule;
@@ -18,6 +20,7 @@ import java.util.Set;
 @Service
 public class VehicleService implements VehicleInterface {
 
+
     @Autowired
     private VehiculeRepository vehicleRepository;
 
@@ -26,6 +29,15 @@ public class VehicleService implements VehicleInterface {
 
     @Autowired
     private FeatureInterface featureService;
+
+    @Autowired
+    private final VehiculeRepositoryCustom vehiculeRepositoryCustom;
+
+    @Autowired
+    public VehicleService(VehiculeRepository vehiculeRepository, VehiculeRepositoryCustom vehiculeRepositoryCustom) {
+        this.vehicleRepository = vehiculeRepository;
+        this.vehiculeRepositoryCustom = vehiculeRepositoryCustom;
+    }
 
     @Override
     public Vehicule addVehicle(Vehicule vehicle) {
@@ -119,5 +131,9 @@ public class VehicleService implements VehicleInterface {
         vehicule.setFeatures(features);
 
         return vehicleRepository.save(vehicule);
+    }
+
+    public List<Vehicule> searchVehicles(VehiculeSearchCriteria criteria) {
+        return vehiculeRepositoryCustom.searchByCriteria(criteria);
     }
 }

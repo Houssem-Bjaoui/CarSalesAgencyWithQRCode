@@ -65,6 +65,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.OPTIONS, "/**")).permitAll()
                         .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/auth/**")).permitAll()
+
 //                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.OPTIONS, "comments/**")).permitAll()
 //
 //                       .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/testDrive/**")).permitAll()
@@ -83,6 +84,7 @@ public class SecurityConfig {
                         .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/send-email")).permitAll()
                                 .requestMatchers("/api/user/profile").hasAnyRole("CLIENT", "ADMIN")
                                 .requestMatchers("/file/upload").hasAnyRole("CLIENT", "ADMIN")
+                                .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/vehicules/search")).permitAll()
 
 
 

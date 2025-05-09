@@ -1,11 +1,13 @@
 package com.example.CarSalesAgency.Controller;
 
 import com.example.CarSalesAgency.DTO.VehiculeRequestDTO;
+import com.example.CarSalesAgency.DTO.VehiculeSearchCriteria;
 import com.example.CarSalesAgency.Entities.Feature;
 import com.example.CarSalesAgency.Entities.File;
 import com.example.CarSalesAgency.Entities.Vehicule;
 import com.example.CarSalesAgency.ServiceImplement.FileService;
 import com.example.CarSalesAgency.ServiceImplement.QRCodeService;
+import com.example.CarSalesAgency.ServiceImplement.VehicleService;
 import com.example.CarSalesAgency.Services.FeatureInterface;
 import com.example.CarSalesAgency.Services.VehicleInterface;
 import com.example.CarSalesAgency.enums.StatutVehicule;
@@ -17,9 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -41,6 +41,13 @@ public class VehiculeController {
 
     @Autowired
     private FeatureInterface featureInterface;
+
+    private final VehicleService vehiculeService;
+
+    @Autowired
+    public VehiculeController(VehicleService vehiculeService) {
+        this.vehiculeService = vehiculeService;
+    }
 
     @PostMapping("/add-with-features-and-images")
     public ResponseEntity<Vehicule> addVehiculeWithFeaturesAndImages(
@@ -178,5 +185,12 @@ public class VehiculeController {
 
         // Retourner le QR Code généré (ou l'URL en Base64)
         return ResponseEntity.ok(vehicule.getQrCode());
+    }
+
+
+    @PostMapping("/search")
+    public ResponseEntity<List<Vehicule>> searchVehicles(@RequestBody VehiculeSearchCriteria criteria) {
+        List<Vehicule> vehicules = vehiculeService.searchVehicles(criteria);
+        return ResponseEntity.ok(vehicules);
     }
 }

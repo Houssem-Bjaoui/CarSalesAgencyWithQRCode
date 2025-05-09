@@ -2,6 +2,7 @@
 package com.example.CarSalesAgency.Controller;
 
 import com.example.CarSalesAgency.Entities.*;
+import com.example.CarSalesAgency.ServiceImplement.PasswordResetService;
 import com.example.CarSalesAgency.Services.AuthService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,8 @@ public class AuthController {
     public AuthController(AuthService authService) {
         this.authService = authService;
     }
-
+    @Autowired
+    private PasswordResetService passwordResetService;
 
 
     @PostMapping("/signin")
@@ -48,7 +50,25 @@ public class AuthController {
         return authService.getUsers();
     }
 
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestParam String email) {
+        try {
+            passwordResetService.createPasswordResetToken(email);
+            return ResponseEntity.ok("Email de réinitialisation envoyé si l'email est enregistré.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestParam String token, @RequestParam String newPassword) {
+        try {
+            passwordResetService.resetPassword(token, newPassword);
+            return ResponseEntity.ok("Mot de passe réinitialisé avec succès.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
 
 }
