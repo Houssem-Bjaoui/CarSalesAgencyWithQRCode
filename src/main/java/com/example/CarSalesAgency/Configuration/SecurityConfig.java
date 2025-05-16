@@ -85,7 +85,9 @@ public class SecurityConfig {
                                 .requestMatchers("/api/user/profile").hasAnyRole("CLIENT", "ADMIN")
                                 .requestMatchers("/file/upload").hasAnyRole("CLIENT", "ADMIN")
                                 .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/vehicules/search")).permitAll()
-
+                                .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/user/all")).permitAll()
+                                .requestMatchers(HttpMethod.DELETE, "/api/user/delete/**").permitAll()
+                                .requestMatchers(HttpMethod.PUT, "/api/user/**").permitAll()
 
 
                                 .anyRequest().authenticated()

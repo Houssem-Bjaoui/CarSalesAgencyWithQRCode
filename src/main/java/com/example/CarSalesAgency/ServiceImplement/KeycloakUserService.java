@@ -14,6 +14,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -78,4 +79,23 @@ public class KeycloakUserService {
     }
 
 
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public void deleteUserById(String userId) {
+        // Suppression dans Keycloak
+        Keycloak keycloak = KeycloakBuilder.builder()
+                .serverUrl("http://localhost:8086")
+                .realm("master")
+                .clientId("admin-cli")
+                .username("admin")
+                .password("admin")
+                .build();
+
+        keycloak.realm("master").users().get(userId).remove();
+
+        // Suppression dans la base de données
+        userRepository.deleteById(userId);
+    }
 }
