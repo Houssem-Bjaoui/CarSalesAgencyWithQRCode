@@ -8,6 +8,7 @@ import com.example.CarSalesAgency.Repository.UserRepository;
 import com.example.CarSalesAgency.Repository.VehiculeRepository;
 import com.example.CarSalesAgency.Services.TestDriveInterface;
 import com.example.CarSalesAgency.enums.TestDriveStatus;
+import com.example.CarSalesAgency.exception.DuplicateTestDriveException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,13 +36,21 @@ public class TestDriveService implements TestDriveInterface {
         Vehicule vehicule = vehiculeRepository.findById(testDrive.getVehicule().getId())
                 .orElseThrow(() -> new RuntimeException("Voiture introuvable"));
 
-        // Définir le statut à PENDING (ignore la valeur envoyée par le client)
+        // 🔒 Vérification si une demande existe déjà
+        boolean exists = testDriveRepository.existsByUserAndVehicule(user, vehicule);
+        if (exists) {
+            // On lève une exception avec un code 409
+            throw new DuplicateTestDriveException("Une demande de test drive existe déjà pour ce véhicule.");
+        }
+
+        // Définir le statut à PENDING
         testDrive.setStatus(TestDriveStatus.PENDING);
         testDrive.setUser(user);
         testDrive.setVehicule(vehicule);
 
         return testDriveRepository.save(testDrive);
     }
+
 
     @Override
     @Transactional

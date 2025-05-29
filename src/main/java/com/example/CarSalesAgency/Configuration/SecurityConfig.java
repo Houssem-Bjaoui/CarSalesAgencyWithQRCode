@@ -83,11 +83,15 @@ public class SecurityConfig {
 //                        .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/file/**")).permitAll()
                         .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/send-email")).permitAll()
                                 .requestMatchers("/api/user/profile").hasAnyRole("CLIENT", "ADMIN")
-                                .requestMatchers("/file/upload").hasAnyRole("CLIENT", "ADMIN")
+//                                .requestMatchers("/file/upload").hasAnyRole("CLIENT", "ADMIN")
                                 .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/vehicules/search")).permitAll()
-                                .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/user/all")).permitAll()
-                                .requestMatchers(HttpMethod.DELETE, "/api/user/delete/**").permitAll()
+//                                .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/user/all")).permitAll()
+//                                .requestMatchers(HttpMethod.DELETE, "/api/user/delete/**").permitAll()
                                 .requestMatchers(HttpMethod.PUT, "/api/user/**").permitAll()
+//                                .requestMatchers(HttpMethod.POST, "/features").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/vehicules/getVehiculeById/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/vehicules/getAllVehicule").permitAll()
+
 
 
                                 .anyRequest().authenticated()

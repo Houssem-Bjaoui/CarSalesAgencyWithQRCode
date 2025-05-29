@@ -30,9 +30,6 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(nullable = false)
-    private String role;
-
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonManagedReference(value = "user-comments")

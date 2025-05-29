@@ -1,12 +1,16 @@
 package com.example.CarSalesAgency.Controller;
 
+import com.example.CarSalesAgency.DTO.VehicleSellRequestDto;
 import com.example.CarSalesAgency.DTO.VehiculeRequestDTO;
 import com.example.CarSalesAgency.DTO.VehiculeSearchCriteria;
 import com.example.CarSalesAgency.Entities.Feature;
 import com.example.CarSalesAgency.Entities.File;
 import com.example.CarSalesAgency.Entities.Vehicule;
+import com.example.CarSalesAgency.Entities.vehicleSellRequest;
+import com.example.CarSalesAgency.Repository.FileRepository;
 import com.example.CarSalesAgency.ServiceImplement.FileService;
 import com.example.CarSalesAgency.ServiceImplement.QRCodeService;
+import com.example.CarSalesAgency.ServiceImplement.VehicleSellRequestService;
 import com.example.CarSalesAgency.ServiceImplement.VehicleService;
 import com.example.CarSalesAgency.Services.FeatureInterface;
 import com.example.CarSalesAgency.Services.VehicleInterface;
@@ -30,6 +34,14 @@ public class VehiculeController {
 
     private static final Logger logger = LoggerFactory.getLogger(VehiculeController.class);
 
+
+    private final VehicleSellRequestService service;
+
+
+    @Autowired
+    private FileRepository fileRepository;
+
+
     @Autowired
     private VehicleInterface vehicleInterface;
 
@@ -45,8 +57,9 @@ public class VehiculeController {
     private final VehicleService vehiculeService;
 
     @Autowired
-    public VehiculeController(VehicleService vehiculeService) {
+    public VehiculeController(VehicleService vehiculeService,VehicleSellRequestService service) {
         this.vehiculeService = vehiculeService;
+        this.service = service;
     }
 
     @PostMapping("/add-with-features-and-images")
@@ -187,6 +200,49 @@ public class VehiculeController {
         return ResponseEntity.ok(vehicule.getQrCode());
     }
 
+
+    @PostMapping("vehicle-sell")
+    public ResponseEntity<vehicleSellRequest> submitRequest(@RequestBody VehicleSellRequestDto dto) {
+        List<File> files = fileRepository.findAllById(dto.getImageIds());
+
+        vehicleSellRequest request = new vehicleSellRequest();
+        request.setFullName(dto.getFullName());
+        request.setEmail(dto.getEmail());
+        request.setPhone(dto.getPhone());
+        request.setBrand(dto.getBrand());
+        request.setModel(dto.getModel());
+        request.setYear(dto.getYear());
+        request.setMileage(dto.getMileage());
+        request.setFuelType(dto.getFuelType());
+        request.setTransmission(dto.getTransmission());
+        request.setColor(dto.getColor());
+        request.setDescription(dto.getDescription());
+        request.setImages(files);
+
+        vehicleSellRequest saved = service.createRequest(request);
+        return ResponseEntity.ok(saved);
+    }
+
+
+
+    // Endpoint GET pour visualiser les demandes (côté admin)
+    @GetMapping
+    public List<vehicleSellRequest> getAll() {
+        return service.getAllRequests();
+    }
+
+
+    @PutMapping("/{id}/accept")
+    public ResponseEntity<vehicleSellRequest> acceptVehicleRequest(@PathVariable Long id) {
+        vehicleSellRequest acceptedRequest = service.acceptRequest(id);
+        return ResponseEntity.ok(acceptedRequest);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteRequest(@PathVariable Long id) {
+        service.deleteRequest(id);
+        return ResponseEntity.noContent().build();
+    }
 
     @PostMapping("/search")
     public ResponseEntity<List<Vehicule>> searchVehicles(@RequestBody VehiculeSearchCriteria criteria) {
